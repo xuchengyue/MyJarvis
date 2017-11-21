@@ -10,7 +10,10 @@ namespace MyJarvis
     public class writemodel : writecode
     {
         public writemodel(DBTable tb) : base(tb)
-        { }
+        {
+            _pathname = "/Models";
+            _filename = $"/{_tb.tbName.Replace("t_","")}Model.cs";
+        }
 
         public override List<string> generate()
         {
@@ -19,11 +22,11 @@ namespace MyJarvis
 
             arr.Add("using System;");
             arr.Add("");
-            arr.Add("namespace Test");
+            arr.Add("namespace MyJarvis");
             arr.Add("{");
-            arr.Add($"    public partial class {modelName}");
+            arr.Add($"    public partial class {modelName}Model");
             arr.Add("    {");
-            arr.Add("        public " + modelName + "() { }");
+            arr.Add("        public " + modelName + "Model() { }");
             arr.Add("");
             foreach (DBField item in _tb.fields)
             {

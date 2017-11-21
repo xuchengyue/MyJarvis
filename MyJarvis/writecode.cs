@@ -5,6 +5,9 @@ namespace MyJarvis
 {
     public abstract class writecode
     {
+        protected string _pathname { get; set; }
+        protected string _filename { get; set; }
+
         protected DBTable _tb { get; set; }
 
         public writecode(DBTable tb)
@@ -19,8 +22,14 @@ namespace MyJarvis
         public void write()
         {
             _content = generate();
-            using (StreamWriter sw = new StreamWriter(config._writepath + _tb.tbName + ".cs"))
+            string path = config._writepath + _pathname;
+            if (!Directory.Exists(path))
             {
+                Directory.CreateDirectory(path);
+            }
+            using (StreamWriter sw = new StreamWriter(path + _filename))
+            {
+
                 foreach (string str in _content)
                 {
                     sw.WriteLine(str);

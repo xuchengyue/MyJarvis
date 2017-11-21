@@ -75,7 +75,9 @@ namespace MyJarvis
                 string sql = $"select COLUMN_NAME as Name,DATA_TYPE as Type,CHARACTER_MAXIMUM_LENGTH as Length,case when IS_NULLABLE='YES' then 1 else 0 end as IsNull from INFORMATION_SCHEMA.COLUMNS t where t.TABLE_NAME = '{table}';";
                 List<DBField> fields = db.Query<DBField>(sql).ToList();
                 writemodel writem = new writemodel(new DBTable { tbName = table, fields = fields });
+                writeservice writems = new writeservice(new DBTable { tbName = table, fields = fields });
                 writem.write();
+                writems.write();
             }
         }
 

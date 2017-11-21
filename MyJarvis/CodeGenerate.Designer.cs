@@ -38,7 +38,7 @@
             // 
             this.DataBaseList.FormattingEnabled = true;
             this.DataBaseList.ItemHeight = 12;
-            this.DataBaseList.Location = new System.Drawing.Point(239, 63);
+            this.DataBaseList.Location = new System.Drawing.Point(224, 64);
             this.DataBaseList.Name = "DataBaseList";
             this.DataBaseList.Size = new System.Drawing.Size(400, 232);
             this.DataBaseList.TabIndex = 0;
