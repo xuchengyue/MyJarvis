@@ -57,7 +57,8 @@ namespace MyJarvis
             }
             catch (Exception ex)
             {
-                throw new Exception("进入数据库错误");
+                MessageBox.Show("进入数据库错误");
+                //throw new Exception("进入数据库错误");
             }
         }
 
@@ -72,12 +73,21 @@ namespace MyJarvis
             string dbLink = $"Data Source=10.20.20.19;Initial Catalog={SelectedDataBase};User Id = dev;Password = etocrm123;";
             using (IDbConnection db = new SqlConnection(dbLink))
             {
-                string sql = $"select COLUMN_NAME as Name,DATA_TYPE as Type,CHARACTER_MAXIMUM_LENGTH as Length,case when IS_NULLABLE='YES' then 1 else 0 end as IsNull from INFORMATION_SCHEMA.COLUMNS t where t.TABLE_NAME = '{table}';";
+                string sql = @"select
+COLUMN_NAME as Name,
+DATA_TYPE as SqlType,
+CHARACTER_MAXIMUM_LENGTH as Length,
+case when IS_NULLABLE='YES' then 1 else 0 end as IsNull, " +
+$"(select colstat from syscolumns where id = object_id('{table}') and name=t.COLUMN_NAME) as IsGenerate," +
+$"case when (select count(1) from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where TABLE_NAME='{table}' and COLUMN_NAME=t.COLUMN_NAME)>0 then 1 else 0 end IsPK " +
+$"from INFORMATION_SCHEMA.COLUMNS t where t.TABLE_NAME = '{table}';";
                 List<DBField> fields = db.Query<DBField>(sql).ToList();
                 writemodel writem = new writemodel(new DBTable { tbName = table, fields = fields });
                 writeservice writems = new writeservice(new DBTable { tbName = table, fields = fields });
                 writem.write();
                 writems.write();
+
+                MessageBox.Show("生成成功");
             }
         }
 
